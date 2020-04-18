@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBAdminModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DataBase">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DBName" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="ServerName" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="DataBaseType">
+    <Key>
+      <PropertyRef Name="DataBaseTypes" />
+    </Key>
+    <Property Name="DataBaseTypes" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Servers" Relationship="Self.FK_ConnectionStrings_ConnectionStrings" FromRole="DataBaseTypes" ToRole="Servers" />
+  </EntityType>
+  <EntityType Name="Server">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="ServerName" Type="String" MaxLength="500" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="AppUserId" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="DBType" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="DataBaseType" Relationship="Self.FK_ConnectionStrings_ConnectionStrings" FromRole="Servers" ToRole="DataBaseTypes" />
+  </EntityType>
+  <Association Name="FK_ConnectionStrings_ConnectionStrings">
+    <End Role="DataBaseTypes" Type="Self.DataBaseType" Multiplicity="1" />
+    <End Role="Servers" Type="Self.Server" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DataBaseTypes">
+        <PropertyRef Name="DataBaseTypes" />
+      </Principal>
+      <Dependent Role="Servers">
+        <PropertyRef Name="DBType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBAdminEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DataBases" EntityType="Self.DataBase" />
+    <EntitySet Name="DataBaseTypes" EntityType="Self.DataBaseType" />
+    <EntitySet Name="Servers" EntityType="Self.Server" />
+    <AssociationSet Name="FK_ConnectionStrings_ConnectionStrings" Association="Self.FK_ConnectionStrings_ConnectionStrings">
+      <End Role="DataBaseTypes" EntitySet="DataBaseTypes" />
+      <End Role="Servers" EntitySet="Servers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

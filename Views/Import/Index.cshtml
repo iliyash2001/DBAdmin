@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Import File";
+}
+
+<h2>Import File</h2>
+
+
+@using (Html.BeginForm("Index", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<div class="form-horizontal">
+    <h4>Upload File</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+
+        @Html.Label("File Upload", new { @class = "col-sm-3" })
+
+        <div class="col-sm-7">
+            <input type="file" id="postedFile" name="postedFile" class="form-control" accept=".csv" />
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="col-md-offset-3 col-md-10">
+            <br />
+            <input type="submit" title="Upload" value="Upload" class="btn btn-default" />
+        </div>
+    </div>
+    
+</div>
+        }
+
+

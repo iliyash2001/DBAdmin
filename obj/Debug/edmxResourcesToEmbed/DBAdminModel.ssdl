@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBAdminModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DataBase">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="smallint" Nullable="false" />
+    <Property Name="DBName" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="ServerName" Type="nchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="DataBaseTypes">
+    <Key>
+      <PropertyRef Name="DataBaseTypes" />
+    </Key>
+    <Property Name="DataBaseTypes" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Servers">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="ServerName" Type="nchar" MaxLength="500" Nullable="false" />
+    <Property Name="UserId" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="AppUserId" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="DBType" Type="nchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ConnectionStrings_ConnectionStrings">
+    <End Role="DataBaseTypes" Type="Self.DataBaseTypes" Multiplicity="1" />
+    <End Role="Servers" Type="Self.Servers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DataBaseTypes">
+        <PropertyRef Name="DataBaseTypes" />
+      </Principal>
+      <Dependent Role="Servers">
+        <PropertyRef Name="DBType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBAdminModelStoreContainer">
+    <EntitySet Name="DataBase" EntityType="Self.DataBase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DataBaseTypes" EntityType="Self.DataBaseTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Servers" EntityType="Self.Servers" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ConnectionStrings_ConnectionStrings" Association="Self.FK_ConnectionStrings_ConnectionStrings">
+      <End Role="DataBaseTypes" EntitySet="DataBaseTypes" />
+      <End Role="Servers" EntitySet="Servers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
